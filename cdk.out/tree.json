@@ -1,0 +1,253 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree"
+      },
+      "url-shortener": {
+        "id": "url-shortener",
+        "path": "url-shortener",
+        "children": {
+          "mapping_table": {
+            "id": "mapping_table",
+            "path": "url-shortener/mapping_table",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "url-shortener/mapping_table/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "keySchema": [
+                      {
+                        "attributeName": "id",
+                        "keyType": "HASH"
+                      }
+                    ],
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "id",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "provisionedThroughput": {
+                      "readCapacityUnits": 5,
+                      "writeCapacityUnits": 5
+                    }
+                  }
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "url-shortener/mapping_table/ScalingRole"
+              }
+            }
+          },
+          "backend_lambda": {
+            "id": "backend_lambda",
+            "path": "url-shortener/backend_lambda",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "url-shortener/backend_lambda/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "url-shortener/backend_lambda/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "url-shortener/backend_lambda/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "url-shortener/backend_lambda/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator",
+                                    "dynamodb:Query",
+                                    "dynamodb:GetItem",
+                                    "dynamodb:Scan",
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:PutItem",
+                                    "dynamodb:UpdateItem",
+                                    "dynamodb:DeleteItem"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "mappingtable52FDC76D",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Ref": "AWS::NoValue"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "backendlambdaServiceRoleDefaultPolicyFF8506F6",
+                            "roles": [
+                              {
+                                "Ref": "backendlambdaServiceRole2E2FB39E"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "url-shortener/backend_lambda/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "url-shortener/backend_lambda/Code/Stage"
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "url-shortener/backend_lambda/Code/AssetBucket"
+                  }
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "url-shortener/backend_lambda/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Ref": "AssetParametersb33c6c7a12dfc1685b7d606239e02e47df81984721814266a34f1f914c1319e1S3BucketEAB92927"
+                      },
+                      "s3Key": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParametersb33c6c7a12dfc1685b7d606239e02e47df81984721814266a34f1f914c1319e1S3VersionKeyB7DAF72A"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParametersb33c6c7a12dfc1685b7d606239e02e47df81984721814266a34f1f914c1319e1S3VersionKeyB7DAF72A"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "handler": "handler.main",
+                    "role": {
+                      "Fn::GetAtt": [
+                        "backendlambdaServiceRole2E2FB39E",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "python3.7",
+                    "environment": {
+                      "variables": {
+                        "TABLE_NAME": {
+                          "Ref": "mappingtable52FDC76D"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "AssetParameters": {
+            "id": "AssetParameters",
+            "path": "url-shortener/AssetParameters",
+            "children": {
+              "b33c6c7a12dfc1685b7d606239e02e47df81984721814266a34f1f914c1319e1": {
+                "id": "b33c6c7a12dfc1685b7d606239e02e47df81984721814266a34f1f914c1319e1",
+                "path": "url-shortener/AssetParameters/b33c6c7a12dfc1685b7d606239e02e47df81984721814266a34f1f914c1319e1",
+                "children": {
+                  "S3Bucket": {
+                    "id": "S3Bucket",
+                    "path": "url-shortener/AssetParameters/b33c6c7a12dfc1685b7d606239e02e47df81984721814266a34f1f914c1319e1/S3Bucket"
+                  },
+                  "S3VersionKey": {
+                    "id": "S3VersionKey",
+                    "path": "url-shortener/AssetParameters/b33c6c7a12dfc1685b7d606239e02e47df81984721814266a34f1f914c1319e1/S3VersionKey"
+                  },
+                  "ArtifactHash": {
+                    "id": "ArtifactHash",
+                    "path": "url-shortener/AssetParameters/b33c6c7a12dfc1685b7d606239e02e47df81984721814266a34f1f914c1319e1/ArtifactHash"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
