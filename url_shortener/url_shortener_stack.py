@@ -38,7 +38,7 @@ class UrlShortenerStack(core.Stack):
         api = aws_apigateway.LambdaRestApi(self, "api", handler=function)
 
         # monitoring system - cdk-watchful
-        wf Watchful(self, 'monitoring', alarm_email='francisco@tensoriot.com')
+        wf = Watchful(self, 'monitoring', alarm_email='francisco@tensoriot.com')
 
         # watchful can  also watch complete cdk construct scopes -- will automatically discover all watchable resources within that scope(recursively) and then add them to your dash and configure alarms for them
         wf.watch_scope(self)
