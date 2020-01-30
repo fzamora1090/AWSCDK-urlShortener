@@ -35,6 +35,16 @@ class UrlShortenerStack(core.Stack):
         # wrapped api gateway endpoint around lambda
         api = aws_apigateway.LambdaRestApi(self, "api", handler=function)
 
+        # traffic generator - useful for load traffic tests -- custom construct to represent load generator = trafico.py
+
+# want traffic generator to be in different stack so that the stack can be destroyed at the end of the test -- dployed seperately
+from traffico import Traffico
+
+class TrafficStack(core.Stack):
+
+    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+        super().__init__(scope, id, **kwargs)
+
 #$ cdk diff --profile workProfile -- to check difference between  local env and deployed
 
 # will create API Gateway endpoint to hit and access lambda url shortening service
