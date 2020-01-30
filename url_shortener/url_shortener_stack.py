@@ -1,4 +1,4 @@
-from aws_cdk import core, aws_dynamodb, aws_lambda
+from aws_cdk import core, aws_dynamodb, aws_lambda, aws_apigateway
 
 # pip install -e .  ; install requirements
 
@@ -14,7 +14,7 @@ class UrlShortenerStack(core.Stack):
                                     partition_key=aws_dynamodb.Attribute(name="id", 
                                     type=aws_dynamodb.AttributeType.STRING)
                                     )
-# cdk deploy --profile workProfile   ;to deploy resource onto my account with workProfile Credentials
+#$ cdk deploy --profile workProfile   ;to deploy resource onto my account with workProfile Credentials
 
         # create lambda resource
         function = aws_lambda.Function(self, "backend_lambda",
@@ -32,4 +32,7 @@ class UrlShortenerStack(core.Stack):
         # adding env var -- only creating desired state representation -- token system in cdk for late binding @ provisioning-- forward preference
         function.add_environment("TABLE_NAME", table.table_name)
 
-# cdk diff --profile workProfile -- to check difference between  local env and deployed
+        # wrapped api gateway endpoint around lambda
+        api = aws_apigateway.LambdaRestApi(self, "api", handler=function)
+
+#$ cdk diff --profile workProfile -- to check difference between  local env and deployed

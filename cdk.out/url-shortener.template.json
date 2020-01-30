@@ -171,6 +171,333 @@
         "aws:asset:path": "asset.b33c6c7a12dfc1685b7d606239e02e47df81984721814266a34f1f914c1319e1",
         "aws:asset:property": "Code"
       }
+    },
+    "apiC8550315": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": "api"
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/api/Resource"
+      }
+    },
+    "apiDeployment149F1294c649a328b677ded577cd58bd2813d558": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "apiC8550315"
+        },
+        "Description": "Automatically created by the RestApi construct"
+      },
+      "DependsOn": [
+        "apiproxyANY7F13F09C",
+        "apiproxy4EA44110",
+        "apiANYB3DF8C3C"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/api/Deployment/Resource"
+      }
+    },
+    "apiDeploymentStageprod896C8101": {
+      "Type": "AWS::ApiGateway::Stage",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "apiC8550315"
+        },
+        "DeploymentId": {
+          "Ref": "apiDeployment149F1294c649a328b677ded577cd58bd2813d558"
+        },
+        "StageName": "prod"
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/api/DeploymentStage.prod/Resource"
+      }
+    },
+    "apiCloudWatchRoleAC81D93E": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/api/CloudWatchRole/Resource"
+      }
+    },
+    "apiAccount57E28B43": {
+      "Type": "AWS::ApiGateway::Account",
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "apiCloudWatchRoleAC81D93E",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "apiC8550315"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/api/Account"
+      }
+    },
+    "apiproxy4EA44110": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "apiC8550315",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": {
+          "Ref": "apiC8550315"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/api/Default/{proxy+}/Resource"
+      }
+    },
+    "apiproxyANYApiPermissionurlshortenerapi1C0D7EBBANYproxyA833884E": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "backendlambda3526E0EA",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-east-1:431528647878:",
+              {
+                "Ref": "apiC8550315"
+              },
+              "/",
+              {
+                "Ref": "apiDeploymentStageprod896C8101"
+              },
+              "/*/{proxy+}"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/api/Default/{proxy+}/ANY/ApiPermission.urlshortenerapi1C0D7EBB.ANY..{proxy+}"
+      }
+    },
+    "apiproxyANYApiPermissionTesturlshortenerapi1C0D7EBBANYproxy306EA74D": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "backendlambda3526E0EA",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-east-1:431528647878:",
+              {
+                "Ref": "apiC8550315"
+              },
+              "/test-invoke-stage/*/{proxy+}"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/api/Default/{proxy+}/ANY/ApiPermission.Test.urlshortenerapi1C0D7EBB.ANY..{proxy+}"
+      }
+    },
+    "apiproxyANY7F13F09C": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Ref": "apiproxy4EA44110"
+        },
+        "RestApiId": {
+          "Ref": "apiC8550315"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "backendlambda3526E0EA",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/api/Default/{proxy+}/ANY/Resource"
+      }
+    },
+    "apiANYApiPermissionurlshortenerapi1C0D7EBBANY49EFD8B9": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "backendlambda3526E0EA",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-east-1:431528647878:",
+              {
+                "Ref": "apiC8550315"
+              },
+              "/",
+              {
+                "Ref": "apiDeploymentStageprod896C8101"
+              },
+              "/*/"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/api/Default/ANY/ApiPermission.urlshortenerapi1C0D7EBB.ANY.."
+      }
+    },
+    "apiANYApiPermissionTesturlshortenerapi1C0D7EBBANY50893075": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "backendlambda3526E0EA",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-east-1:431528647878:",
+              {
+                "Ref": "apiC8550315"
+              },
+              "/test-invoke-stage/*/"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/api/Default/ANY/ApiPermission.Test.urlshortenerapi1C0D7EBB.ANY.."
+      }
+    },
+    "apiANYB3DF8C3C": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "apiC8550315",
+            "RootResourceId"
+          ]
+        },
+        "RestApiId": {
+          "Ref": "apiC8550315"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "backendlambda3526E0EA",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/api/Default/ANY/Resource"
+      }
     }
   },
   "Parameters": {
@@ -185,6 +512,30 @@
     "AssetParametersb33c6c7a12dfc1685b7d606239e02e47df81984721814266a34f1f914c1319e1ArtifactHash10E34D31": {
       "Type": "String",
       "Description": "Artifact hash for asset \"b33c6c7a12dfc1685b7d606239e02e47df81984721814266a34f1f914c1319e1\""
+    }
+  },
+  "Outputs": {
+    "apiEndpoint9349E63C": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "apiC8550315"
+            },
+            ".execute-api.us-east-1.",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/",
+            {
+              "Ref": "apiDeploymentStageprod896C8101"
+            },
+            "/"
+          ]
+        ]
+      }
     }
   }
 }
