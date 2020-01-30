@@ -8,6 +8,7 @@ import boto3
 LOG = logging.getLogger()
 LOG.setLevel(logging.INFO)
 
+# watch for spelling errors guy; cmon!
 
 def main(event, context):
     LOG.info("EVENT: " + json.dumps(event))
