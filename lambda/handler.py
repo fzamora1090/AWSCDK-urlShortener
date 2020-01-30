@@ -12,7 +12,7 @@ LOG.setLevel(logging.INFO)
 def main(event, context):
     LOG.info("EVENT: " + json.dumps(event))
 
-    query_string_params = event["queryStringParameters"]
+    query_string_params = event['queryStringParameters']
     if query_string_params is not None:
         target_url = query_string_params['targetUrl']
         if target_url is not None:
@@ -41,7 +41,7 @@ def create_short_url(event):
 
     # create item in dynamodb table
     dynamodb = boto3.resource('dynamodb')
-    table = dyanmodb.Table(table_name)
+    table = dynamodb.Table(table_name)
     table.put_item(Item={
         'id': id,
         'target_url': target_url
@@ -53,7 +53,7 @@ def create_short_url(event):
         + event["requestContext"]["path"] \
         + id
 
-     return {
+    return {
         'statusCode': 200,
         'headers': {'Content-Type': 'text/plain'},
         'body': 'Created URL: %s' % url
@@ -70,7 +70,7 @@ def read_short_url(event):
     # load redirect target from Dynamodb
     ddb = boto3.resource('dynamodb')
     table = ddb.Table(table_name)
-    response = table.get_item(Key{'id': id})
+    response = table.get_item(Key={'id': id})
     LOG.debug("Response: " + json.dumps(response))
 
     item = response.get("Item", None)
