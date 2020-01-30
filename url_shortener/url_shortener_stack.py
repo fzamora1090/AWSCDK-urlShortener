@@ -36,3 +36,6 @@ class UrlShortenerStack(core.Stack):
         api = aws_apigateway.LambdaRestApi(self, "api", handler=function)
 
 #$ cdk diff --profile workProfile -- to check difference between  local env and deployed
+
+# will create API Gateway endpoint to hit and access lambda url shortening service
+# want to add under sub domain to be availble under domain name for professional looking service to run on
