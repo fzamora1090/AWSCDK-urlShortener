@@ -16,7 +16,7 @@ class Traffico(Construct):
         taskdef = aws_ecs.FargateTaskDefinition(self, 'PingerTask')
 
         # add container to task definition + cdk assets to define docker image just like we did for lambda definition
-        taskdef.add_container('Pinger', image=aws_ecs.ContainerImage.from_asset('./pinger'),  #zaslo need to spicfy environment variable for URL - general purpose traffic generator would expect an input
+        taskdef.add_container('Pinger', image=aws_ecs.ContainerImage.from_asset('./pinger'),  #aslo need to spicfy environment variable for URL - general purpose traffic generator would expect an input
                                 environment={
                                     'URL': url
                                     })

@@ -498,6 +498,352 @@
       "Metadata": {
         "aws:cdk:path": "url-shortener/api/Default/ANY/Resource"
       }
+    },
+    "monitoringAlarmTopicFE581D1E": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "Watchful Alarms"
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/monitoring/AlarmTopic/Resource"
+      }
+    },
+    "monitoringAlarmTopicfranciscotensoriotcomB952ED14": {
+      "Type": "AWS::SNS::Subscription",
+      "Properties": {
+        "Protocol": "email",
+        "TopicArn": {
+          "Ref": "monitoringAlarmTopicFE581D1E"
+        },
+        "Endpoint": "francisco@tensoriot.com"
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/monitoring/AlarmTopic/francisco@tensoriot.com/Resource"
+      }
+    },
+    "monitoringDashboard9DC4C66B": {
+      "Type": "AWS::CloudWatch::Dashboard",
+      "Properties": {
+        "DashboardBody": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"widgets\":[{\"type\":\"text\",\"width\":24,\"height\":2,\"x\":0,\"y\":0,\"properties\":{\"markdown\":\"# url-shortener/mapping_table\\n[button:Amazon DynamoDB Console](https://console.aws.amazon.com/dynamodb/home?region=us-east-1#tables:selected=",
+              {
+                "Ref": "mappingtable52FDC76D"
+              },
+              ";tab=overview)\"}},{\"type\":\"metric\",\"width\":12,\"height\":6,\"x\":0,\"y\":2,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Read Capacity Units/1min\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
+              {
+                "Ref": "mappingtable52FDC76D"
+              },
+              "\",{\"label\":\"Consumed\",\"period\":60,\"stat\":\"Sum\"}]],\"annotations\":{\"horizontal\":[{\"label\":\"Provisioned\",\"value\":300,\"color\":\"#58D68D\",\"yAxis\":\"left\"},{\"color\":\"#FF3333\",\"label\":\"Alarm on 80%\",\"value\":240,\"yAxis\":\"left\"}]},\"yAxis\":{}}},{\"type\":\"metric\",\"width\":12,\"height\":6,\"x\":12,\"y\":2,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Write Capacity Units/1min\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
+              {
+                "Ref": "mappingtable52FDC76D"
+              },
+              "\",{\"label\":\"Consumed\",\"period\":60,\"stat\":\"Sum\"}]],\"annotations\":{\"horizontal\":[{\"label\":\"Provisioned\",\"value\":300,\"color\":\"#58D68D\",\"yAxis\":\"left\"},{\"color\":\"#FF3333\",\"label\":\"Alarm on 80%\",\"value\":240,\"yAxis\":\"left\"}]},\"yAxis\":{}}},{\"type\":\"text\",\"width\":24,\"height\":2,\"x\":0,\"y\":8,\"properties\":{\"markdown\":\"# url-shortener/backend_lambda\\n[button:AWS Lambda Console](https://console.aws.amazon.com/lambda/home?region=us-east-1#/functions/",
+              {
+                "Ref": "backendlambda3526E0EA"
+              },
+              "?tab=graph) | [button:CloudWatch Logs](https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logEventViewer:group=/aws/lambda/",
+              {
+                "Ref": "backendlambda3526E0EA"
+              },
+              ")\"}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":10,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Invocations/5min\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"metrics\":[[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+              {
+                "Ref": "backendlambda3526E0EA"
+              },
+              "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":6,\"y\":10,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Errors/5min\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"metrics\":[[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+              {
+                "Ref": "backendlambda3526E0EA"
+              },
+              "\",{\"stat\":\"Sum\"}]],\"annotations\":{\"horizontal\":[{\"label\":\"Errors > 0 for 3 datapoints within 15 minutes\",\"value\":0,\"yAxis\":\"left\"}]},\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":12,\"y\":10,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Throttles/5min\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"metrics\":[[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+              {
+                "Ref": "backendlambda3526E0EA"
+              },
+              "\",{\"stat\":\"Sum\"}]],\"annotations\":{\"horizontal\":[{\"label\":\"Throttles > 0 for 3 datapoints within 15 minutes\",\"value\":0,\"yAxis\":\"left\"}]},\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":18,\"y\":10,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Duration/5min\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+              {
+                "Ref": "backendlambda3526E0EA"
+              },
+              "\"]],\"annotations\":{\"horizontal\":[{\"label\":\"Duration > 2000 for 3 datapoints within 15 minutes\",\"value\":2000,\"yAxis\":\"left\"}]},\"yAxis\":{}}},{\"type\":\"text\",\"width\":24,\"height\":2,\"x\":0,\"y\":16,\"properties\":{\"markdown\":\"# url-shortener/api\\n[button:Amazon API Gateway Console](https://console.aws.amazon.com/apigateway/home?region=us-east-1#/apis/",
+              {
+                "Ref": "apiC8550315"
+              },
+              ")\"}},{\"type\":\"metric\",\"width\":12,\"height\":6,\"x\":0,\"y\":18,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Overall Calls/min\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiName\",\"api\",\"Stage\",\"",
+              {
+                "Ref": "apiDeploymentStageprod896C8101"
+              },
+              "\",{\"color\":\"#1f77b4\",\"label\":\"Calls\",\"period\":60,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"4XXError\",\"ApiName\",\"api\",\"Stage\",\"",
+              {
+                "Ref": "apiDeploymentStageprod896C8101"
+              },
+              "\",{\"color\":\"#ff7f0e\",\"label\":\"HTTP 4XX\",\"period\":60,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiName\",\"api\",\"Stage\",\"",
+              {
+                "Ref": "apiDeploymentStageprod896C8101"
+              },
+              "\",{\"color\":\"#d62728\",\"label\":\"HTTP 5XX\",\"period\":60,\"stat\":\"Sum\"}]],\"annotations\":{\"horizontal\":[{\"value\":1,\"color\":\"#ff0000\",\"label\":\"5XX Errors Alarm\",\"yAxis\":\"left\"}]},\"yAxis\":{}}},{\"type\":\"metric\",\"width\":12,\"height\":6,\"x\":12,\"y\":18,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Overall Latency (1-minute periods)\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"api\",\"Stage\",\"",
+              {
+                "Ref": "apiDeploymentStageprod896C8101"
+              },
+              "\",{\"label\":\"min\",\"period\":60,\"stat\":\"Minimum\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"api\",\"Stage\",\"",
+              {
+                "Ref": "apiDeploymentStageprod896C8101"
+              },
+              "\",{\"label\":\"avg\",\"period\":60}],[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"api\",\"Stage\",\"",
+              {
+                "Ref": "apiDeploymentStageprod896C8101"
+              },
+              "\",{\"label\":\"p90\",\"period\":60,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"api\",\"Stage\",\"",
+              {
+                "Ref": "apiDeploymentStageprod896C8101"
+              },
+              "\",{\"label\":\"p99\",\"period\":60,\"stat\":\"p99\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"api\",\"Stage\",\"",
+              {
+                "Ref": "apiDeploymentStageprod896C8101"
+              },
+              "\",{\"label\":\"max\",\"period\":60,\"stat\":\"Maximum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":12,\"height\":6,\"x\":0,\"y\":24,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Overall IntegrationLatency (1-minute periods)\",\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"IntegrationLatency\",\"ApiName\",\"api\",\"Stage\",\"",
+              {
+                "Ref": "apiDeploymentStageprod896C8101"
+              },
+              "\",{\"label\":\"min\",\"period\":60,\"stat\":\"Minimum\"}],[\"AWS/ApiGateway\",\"IntegrationLatency\",\"ApiName\",\"api\",\"Stage\",\"",
+              {
+                "Ref": "apiDeploymentStageprod896C8101"
+              },
+              "\",{\"label\":\"avg\",\"period\":60}],[\"AWS/ApiGateway\",\"IntegrationLatency\",\"ApiName\",\"api\",\"Stage\",\"",
+              {
+                "Ref": "apiDeploymentStageprod896C8101"
+              },
+              "\",{\"label\":\"p90\",\"period\":60,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"IntegrationLatency\",\"ApiName\",\"api\",\"Stage\",\"",
+              {
+                "Ref": "apiDeploymentStageprod896C8101"
+              },
+              "\",{\"label\":\"p99\",\"period\":60,\"stat\":\"p99\"}],[\"AWS/ApiGateway\",\"IntegrationLatency\",\"ApiName\",\"api\",\"Stage\",\"",
+              {
+                "Ref": "apiDeploymentStageprod896C8101"
+              },
+              "\",{\"label\":\"max\",\"period\":60,\"stat\":\"Maximum\"}]],\"yAxis\":{}}}]}"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/monitoring/Dashboard/Resource"
+      }
+    },
+    "monitoringurlshortenermappingtable5D4F12F7CapacityAlarmread6AC533D9": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "AlarmActions": [
+          {
+            "Ref": "monitoringAlarmTopicFE581D1E"
+          }
+        ],
+        "AlarmDescription": "at 1200% of read capacity",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "mappingtable52FDC76D"
+            }
+          }
+        ],
+        "MetricName": "ConsumedReadCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "Period": 300,
+        "Statistic": "Sum",
+        "Threshold": 1200,
+        "Unit": "Count"
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/monitoring/urlshortenermappingtable5D4F12F7/CapacityAlarm:read/Resource"
+      }
+    },
+    "monitoringurlshortenermappingtable5D4F12F7CapacityAlarmwrite6D1BB24E": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "AlarmActions": [
+          {
+            "Ref": "monitoringAlarmTopicFE581D1E"
+          }
+        ],
+        "AlarmDescription": "at 1200% of write capacity",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": {
+              "Ref": "mappingtable52FDC76D"
+            }
+          }
+        ],
+        "MetricName": "ConsumedWriteCapacityUnits",
+        "Namespace": "AWS/DynamoDB",
+        "Period": 300,
+        "Statistic": "Sum",
+        "Threshold": 1200,
+        "Unit": "Count"
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/monitoring/urlshortenermappingtable5D4F12F7/CapacityAlarm:write/Resource"
+      }
+    },
+    "monitoringurlshortenerbackendlambdaD40B84E8ErrorsAlarm87367B51": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 3,
+        "AlarmActions": [
+          {
+            "Ref": "monitoringAlarmTopicFE581D1E"
+          }
+        ],
+        "AlarmDescription": "Over 0 errors per minute",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Ref": "backendlambda3526E0EA"
+            }
+          }
+        ],
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda",
+        "Period": 300,
+        "Statistic": "Sum",
+        "Threshold": 0
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/monitoring/urlshortenerbackendlambdaD40B84E8/ErrorsAlarm/Resource"
+      }
+    },
+    "monitoringurlshortenerbackendlambdaD40B84E8ThrottlesAlarm4C2CA8A5": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 3,
+        "AlarmActions": [
+          {
+            "Ref": "monitoringAlarmTopicFE581D1E"
+          }
+        ],
+        "AlarmDescription": "Over 0 throttles per minute",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Ref": "backendlambda3526E0EA"
+            }
+          }
+        ],
+        "MetricName": "Throttles",
+        "Namespace": "AWS/Lambda",
+        "Period": 300,
+        "Statistic": "Sum",
+        "Threshold": 0
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/monitoring/urlshortenerbackendlambdaD40B84E8/ThrottlesAlarm/Resource"
+      }
+    },
+    "monitoringurlshortenerbackendlambdaD40B84E8DurationAlarm7FED67C6": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 3,
+        "AlarmActions": [
+          {
+            "Ref": "monitoringAlarmTopicFE581D1E"
+          }
+        ],
+        "AlarmDescription": "p99 latency >= 2s (80%)",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Ref": "backendlambda3526E0EA"
+            }
+          }
+        ],
+        "MetricName": "Duration",
+        "Namespace": "AWS/Lambda",
+        "Period": 300,
+        "Statistic": "Average",
+        "Threshold": 2000
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/monitoring/urlshortenerbackendlambdaD40B84E8/DurationAlarm/Resource"
+      }
+    },
+    "monitoringurlshortenerapi1C0D7EBB5XXErrorAlarmBD9CEF30": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "AlarmActions": [
+          {
+            "Ref": "monitoringAlarmTopicFE581D1E"
+          }
+        ],
+        "AlarmDescription": "at 1",
+        "Dimensions": [
+          {
+            "Name": "ApiName",
+            "Value": "api"
+          },
+          {
+            "Name": "Stage",
+            "Value": {
+              "Ref": "apiDeploymentStageprod896C8101"
+            }
+          }
+        ],
+        "MetricName": "5XXError",
+        "Namespace": "AWS/ApiGateway",
+        "Period": 300,
+        "Statistic": "Sum",
+        "Threshold": 1
+      },
+      "Metadata": {
+        "aws:cdk:path": "url-shortener/monitoring/urlshortenerapi1C0D7EBB/5XXErrorAlarm/Resource"
+      }
     }
   },
   "Parameters": {
@@ -533,6 +879,19 @@
               "Ref": "apiDeploymentStageprod896C8101"
             },
             "/"
+          ]
+        ]
+      }
+    },
+    "monitoringWatchfulDashboard0D77215A": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards:name=",
+            {
+              "Ref": "monitoringDashboard9DC4C66B"
+            }
           ]
         ]
       }

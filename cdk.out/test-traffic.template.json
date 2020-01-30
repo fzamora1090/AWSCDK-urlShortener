@@ -659,7 +659,7 @@
                   {
                     "Ref": "AWS::URLSuffix"
                   },
-                  "/aws-cdk/assets:26d6878b7dc164f686428c2a28cda09460120e2963818715445fb9a949403843"
+                  "/cdk/testtraffictesttrafficpingertaskpingerassetimageaf52221a:b73cd3dbae279abadd3ef5ea87aba4ba11d6f80341ba915cf0713142f99105a4"
                 ]
               ]
             },
@@ -688,6 +688,27 @@
       },
       "Metadata": {
         "aws:cdk:path": "test-traffic/TestTraffic/PingerTask/Resource"
+      }
+    },
+    "TestTrafficPingerTaskPingerAssetImageAdoptRepositoryD54B0027": {
+      "Type": "Custom::ECRAdoptedRepository",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c52BE89E9",
+            "Arn"
+          ]
+        },
+        "RepositoryName": "cdk/testtraffictesttrafficpingertaskpingerassetimageaf52221a"
+      },
+      "DependsOn": [
+        "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62cServiceRoleDefaultPolicy6BC8737C",
+        "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62cServiceRoleD788AA17"
+      ],
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/TestTraffic/PingerTask/Pinger/AssetImage/AdoptRepository/Resource/Default"
       }
     },
     "TestTrafficPingerTaskExecutionRole70CA866B": {
@@ -730,7 +751,13 @@
                     {
                       "Ref": "AWS::Partition"
                     },
-                    ":ecr:us-east-1:431528647878:repository/aws-cdk/assets"
+                    ":ecr:us-east-1:431528647878:repository/",
+                    {
+                      "Fn::GetAtt": [
+                        "TestTrafficPingerTaskPingerAssetImageAdoptRepositoryD54B0027",
+                        "RepositoryName"
+                      ]
+                    }
                   ]
                 ]
               }
@@ -817,6 +844,156 @@
       "Metadata": {
         "aws:cdk:path": "test-traffic/TestTraffic/PingerService/SecurityGroup/Resource"
       }
+    },
+    "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62cServiceRoleD788AA17": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c/ServiceRole/Resource"
+      }
+    },
+    "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62cServiceRoleDefaultPolicy6BC8737C": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:GetRepositoryPolicy",
+                "ecr:SetRepositoryPolicy",
+                "ecr:DeleteRepository",
+                "ecr:ListImages",
+                "ecr:BatchDeleteImage"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ecr:us-east-1:431528647878:repository/cdk/testtraffictesttrafficpingertaskpingerassetimageaf52221a"
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62cServiceRoleDefaultPolicy6BC8737C",
+        "Roles": [
+          {
+            "Ref": "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62cServiceRoleD788AA17"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c/ServiceRole/DefaultPolicy/Resource"
+      }
+    },
+    "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c52BE89E9": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParametersa65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7S3Bucket7CBBD48C"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersa65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7S3VersionKey87E3D057"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersa65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7S3VersionKey87E3D057"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Handler": "handler.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62cServiceRoleD788AA17",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs10.x",
+        "Timeout": 300
+      },
+      "DependsOn": [
+        "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62cServiceRoleDefaultPolicy6BC8737C",
+        "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62cServiceRoleD788AA17"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c/Resource",
+        "aws:asset:path": "asset.a65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7",
+        "aws:asset:property": "Code"
+      }
+    }
+  },
+  "Parameters": {
+    "AssetParametersa65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7S3Bucket7CBBD48C": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"a65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7\""
+    },
+    "AssetParametersa65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7S3VersionKey87E3D057": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"a65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7\""
+    },
+    "AssetParametersa65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7ArtifactHash3E217B68": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"a65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7\""
     }
   }
 }

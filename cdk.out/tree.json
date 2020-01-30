@@ -628,6 +628,443 @@
                 }
               }
             }
+          },
+          "monitoring": {
+            "id": "monitoring",
+            "path": "url-shortener/monitoring",
+            "children": {
+              "AlarmTopic": {
+                "id": "AlarmTopic",
+                "path": "url-shortener/monitoring/AlarmTopic",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "url-shortener/monitoring/AlarmTopic/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                      "aws:cdk:cloudformation:props": {
+                        "displayName": "Watchful Alarms"
+                      }
+                    }
+                  },
+                  "francisco@tensoriot.com": {
+                    "id": "francisco@tensoriot.com",
+                    "path": "url-shortener/monitoring/AlarmTopic/francisco@tensoriot.com",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "url-shortener/monitoring/AlarmTopic/francisco@tensoriot.com/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
+                          "aws:cdk:cloudformation:props": {
+                            "protocol": "email",
+                            "topicArn": {
+                              "Ref": "monitoringAlarmTopicFE581D1E"
+                            },
+                            "endpoint": "francisco@tensoriot.com"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "Dashboard": {
+                "id": "Dashboard",
+                "path": "url-shortener/monitoring/Dashboard",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "url-shortener/monitoring/Dashboard/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
+                      "aws:cdk:cloudformation:props": {
+                        "dashboardBody": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "{\"widgets\":[{\"type\":\"text\",\"width\":24,\"height\":2,\"x\":0,\"y\":0,\"properties\":{\"markdown\":\"# url-shortener/mapping_table\\n[button:Amazon DynamoDB Console](https://console.aws.amazon.com/dynamodb/home?region=us-east-1#tables:selected=",
+                              {
+                                "Ref": "mappingtable52FDC76D"
+                              },
+                              ";tab=overview)\"}},{\"type\":\"metric\",\"width\":12,\"height\":6,\"x\":0,\"y\":2,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Read Capacity Units/1min\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"",
+                              {
+                                "Ref": "mappingtable52FDC76D"
+                              },
+                              "\",{\"label\":\"Consumed\",\"period\":60,\"stat\":\"Sum\"}]],\"annotations\":{\"horizontal\":[{\"label\":\"Provisioned\",\"value\":300,\"color\":\"#58D68D\",\"yAxis\":\"left\"},{\"color\":\"#FF3333\",\"label\":\"Alarm on 80%\",\"value\":240,\"yAxis\":\"left\"}]},\"yAxis\":{}}},{\"type\":\"metric\",\"width\":12,\"height\":6,\"x\":12,\"y\":2,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Write Capacity Units/1min\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":true,\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"",
+                              {
+                                "Ref": "mappingtable52FDC76D"
+                              },
+                              "\",{\"label\":\"Consumed\",\"period\":60,\"stat\":\"Sum\"}]],\"annotations\":{\"horizontal\":[{\"label\":\"Provisioned\",\"value\":300,\"color\":\"#58D68D\",\"yAxis\":\"left\"},{\"color\":\"#FF3333\",\"label\":\"Alarm on 80%\",\"value\":240,\"yAxis\":\"left\"}]},\"yAxis\":{}}},{\"type\":\"text\",\"width\":24,\"height\":2,\"x\":0,\"y\":8,\"properties\":{\"markdown\":\"# url-shortener/backend_lambda\\n[button:AWS Lambda Console](https://console.aws.amazon.com/lambda/home?region=us-east-1#/functions/",
+                              {
+                                "Ref": "backendlambda3526E0EA"
+                              },
+                              "?tab=graph) | [button:CloudWatch Logs](https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logEventViewer:group=/aws/lambda/",
+                              {
+                                "Ref": "backendlambda3526E0EA"
+                              },
+                              ")\"}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":10,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Invocations/5min\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"metrics\":[[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                              {
+                                "Ref": "backendlambda3526E0EA"
+                              },
+                              "\",{\"stat\":\"Sum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":6,\"y\":10,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Errors/5min\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"metrics\":[[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+                              {
+                                "Ref": "backendlambda3526E0EA"
+                              },
+                              "\",{\"stat\":\"Sum\"}]],\"annotations\":{\"horizontal\":[{\"label\":\"Errors > 0 for 3 datapoints within 15 minutes\",\"value\":0,\"yAxis\":\"left\"}]},\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":12,\"y\":10,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Throttles/5min\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"metrics\":[[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+                              {
+                                "Ref": "backendlambda3526E0EA"
+                              },
+                              "\",{\"stat\":\"Sum\"}]],\"annotations\":{\"horizontal\":[{\"label\":\"Throttles > 0 for 3 datapoints within 15 minutes\",\"value\":0,\"yAxis\":\"left\"}]},\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":18,\"y\":10,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Duration/5min\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                              {
+                                "Ref": "backendlambda3526E0EA"
+                              },
+                              "\"]],\"annotations\":{\"horizontal\":[{\"label\":\"Duration > 2000 for 3 datapoints within 15 minutes\",\"value\":2000,\"yAxis\":\"left\"}]},\"yAxis\":{}}},{\"type\":\"text\",\"width\":24,\"height\":2,\"x\":0,\"y\":16,\"properties\":{\"markdown\":\"# url-shortener/api\\n[button:Amazon API Gateway Console](https://console.aws.amazon.com/apigateway/home?region=us-east-1#/apis/",
+                              {
+                                "Ref": "apiC8550315"
+                              },
+                              ")\"}},{\"type\":\"metric\",\"width\":12,\"height\":6,\"x\":0,\"y\":18,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Overall Calls/min\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiName\",\"api\",\"Stage\",\"",
+                              {
+                                "Ref": "apiDeploymentStageprod896C8101"
+                              },
+                              "\",{\"color\":\"#1f77b4\",\"label\":\"Calls\",\"period\":60,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"4XXError\",\"ApiName\",\"api\",\"Stage\",\"",
+                              {
+                                "Ref": "apiDeploymentStageprod896C8101"
+                              },
+                              "\",{\"color\":\"#ff7f0e\",\"label\":\"HTTP 4XX\",\"period\":60,\"stat\":\"Sum\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiName\",\"api\",\"Stage\",\"",
+                              {
+                                "Ref": "apiDeploymentStageprod896C8101"
+                              },
+                              "\",{\"color\":\"#d62728\",\"label\":\"HTTP 5XX\",\"period\":60,\"stat\":\"Sum\"}]],\"annotations\":{\"horizontal\":[{\"value\":1,\"color\":\"#ff0000\",\"label\":\"5XX Errors Alarm\",\"yAxis\":\"left\"}]},\"yAxis\":{}}},{\"type\":\"metric\",\"width\":12,\"height\":6,\"x\":12,\"y\":18,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Overall Latency (1-minute periods)\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"api\",\"Stage\",\"",
+                              {
+                                "Ref": "apiDeploymentStageprod896C8101"
+                              },
+                              "\",{\"label\":\"min\",\"period\":60,\"stat\":\"Minimum\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"api\",\"Stage\",\"",
+                              {
+                                "Ref": "apiDeploymentStageprod896C8101"
+                              },
+                              "\",{\"label\":\"avg\",\"period\":60}],[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"api\",\"Stage\",\"",
+                              {
+                                "Ref": "apiDeploymentStageprod896C8101"
+                              },
+                              "\",{\"label\":\"p90\",\"period\":60,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"api\",\"Stage\",\"",
+                              {
+                                "Ref": "apiDeploymentStageprod896C8101"
+                              },
+                              "\",{\"label\":\"p99\",\"period\":60,\"stat\":\"p99\"}],[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"api\",\"Stage\",\"",
+                              {
+                                "Ref": "apiDeploymentStageprod896C8101"
+                              },
+                              "\",{\"label\":\"max\",\"period\":60,\"stat\":\"Maximum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":12,\"height\":6,\"x\":0,\"y\":24,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Overall IntegrationLatency (1-minute periods)\",\"region\":\"",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              "\",\"stacked\":false,\"metrics\":[[\"AWS/ApiGateway\",\"IntegrationLatency\",\"ApiName\",\"api\",\"Stage\",\"",
+                              {
+                                "Ref": "apiDeploymentStageprod896C8101"
+                              },
+                              "\",{\"label\":\"min\",\"period\":60,\"stat\":\"Minimum\"}],[\"AWS/ApiGateway\",\"IntegrationLatency\",\"ApiName\",\"api\",\"Stage\",\"",
+                              {
+                                "Ref": "apiDeploymentStageprod896C8101"
+                              },
+                              "\",{\"label\":\"avg\",\"period\":60}],[\"AWS/ApiGateway\",\"IntegrationLatency\",\"ApiName\",\"api\",\"Stage\",\"",
+                              {
+                                "Ref": "apiDeploymentStageprod896C8101"
+                              },
+                              "\",{\"label\":\"p90\",\"period\":60,\"stat\":\"p90\"}],[\"AWS/ApiGateway\",\"IntegrationLatency\",\"ApiName\",\"api\",\"Stage\",\"",
+                              {
+                                "Ref": "apiDeploymentStageprod896C8101"
+                              },
+                              "\",{\"label\":\"p99\",\"period\":60,\"stat\":\"p99\"}],[\"AWS/ApiGateway\",\"IntegrationLatency\",\"ApiName\",\"api\",\"Stage\",\"",
+                              {
+                                "Ref": "apiDeploymentStageprod896C8101"
+                              },
+                              "\",{\"label\":\"max\",\"period\":60,\"stat\":\"Maximum\"}]],\"yAxis\":{}}}]}"
+                            ]
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "WatchfulDashboard": {
+                "id": "WatchfulDashboard",
+                "path": "url-shortener/monitoring/WatchfulDashboard"
+              },
+              "urlshortenermappingtable5D4F12F7": {
+                "id": "urlshortenermappingtable5D4F12F7",
+                "path": "url-shortener/monitoring/urlshortenermappingtable5D4F12F7",
+                "children": {
+                  "CapacityAlarm:read": {
+                    "id": "CapacityAlarm:read",
+                    "path": "url-shortener/monitoring/urlshortenermappingtable5D4F12F7/CapacityAlarm:read",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "url-shortener/monitoring/urlshortenermappingtable5D4F12F7/CapacityAlarm:read/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                          "aws:cdk:cloudformation:props": {
+                            "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                            "evaluationPeriods": 1,
+                            "alarmActions": [
+                              {
+                                "Ref": "monitoringAlarmTopicFE581D1E"
+                              }
+                            ],
+                            "alarmDescription": "at 1200% of read capacity",
+                            "dimensions": [
+                              {
+                                "name": "TableName",
+                                "value": {
+                                  "Ref": "mappingtable52FDC76D"
+                                }
+                              }
+                            ],
+                            "metricName": "ConsumedReadCapacityUnits",
+                            "namespace": "AWS/DynamoDB",
+                            "period": 300,
+                            "statistic": "Sum",
+                            "threshold": 1200,
+                            "unit": "Count"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "CapacityAlarm:write": {
+                    "id": "CapacityAlarm:write",
+                    "path": "url-shortener/monitoring/urlshortenermappingtable5D4F12F7/CapacityAlarm:write",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "url-shortener/monitoring/urlshortenermappingtable5D4F12F7/CapacityAlarm:write/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                          "aws:cdk:cloudformation:props": {
+                            "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                            "evaluationPeriods": 1,
+                            "alarmActions": [
+                              {
+                                "Ref": "monitoringAlarmTopicFE581D1E"
+                              }
+                            ],
+                            "alarmDescription": "at 1200% of write capacity",
+                            "dimensions": [
+                              {
+                                "name": "TableName",
+                                "value": {
+                                  "Ref": "mappingtable52FDC76D"
+                                }
+                              }
+                            ],
+                            "metricName": "ConsumedWriteCapacityUnits",
+                            "namespace": "AWS/DynamoDB",
+                            "period": 300,
+                            "statistic": "Sum",
+                            "threshold": 1200,
+                            "unit": "Count"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "urlshortenerbackendlambdaD40B84E8": {
+                "id": "urlshortenerbackendlambdaD40B84E8",
+                "path": "url-shortener/monitoring/urlshortenerbackendlambdaD40B84E8",
+                "children": {
+                  "ErrorsAlarm": {
+                    "id": "ErrorsAlarm",
+                    "path": "url-shortener/monitoring/urlshortenerbackendlambdaD40B84E8/ErrorsAlarm",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "url-shortener/monitoring/urlshortenerbackendlambdaD40B84E8/ErrorsAlarm/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                          "aws:cdk:cloudformation:props": {
+                            "comparisonOperator": "GreaterThanThreshold",
+                            "evaluationPeriods": 3,
+                            "alarmActions": [
+                              {
+                                "Ref": "monitoringAlarmTopicFE581D1E"
+                              }
+                            ],
+                            "alarmDescription": "Over 0 errors per minute",
+                            "dimensions": [
+                              {
+                                "name": "FunctionName",
+                                "value": {
+                                  "Ref": "backendlambda3526E0EA"
+                                }
+                              }
+                            ],
+                            "metricName": "Errors",
+                            "namespace": "AWS/Lambda",
+                            "period": 300,
+                            "statistic": "Sum",
+                            "threshold": 0
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "ThrottlesAlarm": {
+                    "id": "ThrottlesAlarm",
+                    "path": "url-shortener/monitoring/urlshortenerbackendlambdaD40B84E8/ThrottlesAlarm",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "url-shortener/monitoring/urlshortenerbackendlambdaD40B84E8/ThrottlesAlarm/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                          "aws:cdk:cloudformation:props": {
+                            "comparisonOperator": "GreaterThanThreshold",
+                            "evaluationPeriods": 3,
+                            "alarmActions": [
+                              {
+                                "Ref": "monitoringAlarmTopicFE581D1E"
+                              }
+                            ],
+                            "alarmDescription": "Over 0 throttles per minute",
+                            "dimensions": [
+                              {
+                                "name": "FunctionName",
+                                "value": {
+                                  "Ref": "backendlambda3526E0EA"
+                                }
+                              }
+                            ],
+                            "metricName": "Throttles",
+                            "namespace": "AWS/Lambda",
+                            "period": 300,
+                            "statistic": "Sum",
+                            "threshold": 0
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "DurationAlarm": {
+                    "id": "DurationAlarm",
+                    "path": "url-shortener/monitoring/urlshortenerbackendlambdaD40B84E8/DurationAlarm",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "url-shortener/monitoring/urlshortenerbackendlambdaD40B84E8/DurationAlarm/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                          "aws:cdk:cloudformation:props": {
+                            "comparisonOperator": "GreaterThanThreshold",
+                            "evaluationPeriods": 3,
+                            "alarmActions": [
+                              {
+                                "Ref": "monitoringAlarmTopicFE581D1E"
+                              }
+                            ],
+                            "alarmDescription": "p99 latency >= 2s (80%)",
+                            "dimensions": [
+                              {
+                                "name": "FunctionName",
+                                "value": {
+                                  "Ref": "backendlambda3526E0EA"
+                                }
+                              }
+                            ],
+                            "metricName": "Duration",
+                            "namespace": "AWS/Lambda",
+                            "period": 300,
+                            "statistic": "Average",
+                            "threshold": 2000
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "urlshortenerapi1C0D7EBB": {
+                "id": "urlshortenerapi1C0D7EBB",
+                "path": "url-shortener/monitoring/urlshortenerapi1C0D7EBB",
+                "children": {
+                  "5XXErrorAlarm": {
+                    "id": "5XXErrorAlarm",
+                    "path": "url-shortener/monitoring/urlshortenerapi1C0D7EBB/5XXErrorAlarm",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "url-shortener/monitoring/urlshortenerapi1C0D7EBB/5XXErrorAlarm/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                          "aws:cdk:cloudformation:props": {
+                            "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                            "evaluationPeriods": 1,
+                            "alarmActions": [
+                              {
+                                "Ref": "monitoringAlarmTopicFE581D1E"
+                              }
+                            ],
+                            "alarmDescription": "at 1",
+                            "dimensions": [
+                              {
+                                "name": "ApiName",
+                                "value": "api"
+                              },
+                              {
+                                "name": "Stage",
+                                "value": {
+                                  "Ref": "apiDeploymentStageprod896C8101"
+                                }
+                              }
+                            ],
+                            "metricName": "5XXError",
+                            "namespace": "AWS/ApiGateway",
+                            "period": 300,
+                            "statistic": "Sum",
+                            "threshold": 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -1404,7 +1841,7 @@
                                   {
                                     "Ref": "AWS::URLSuffix"
                                   },
-                                  "/aws-cdk/assets:26d6878b7dc164f686428c2a28cda09460120e2963818715445fb9a949403843"
+                                  "/cdk/testtraffictesttrafficpingertaskpingerassetimageaf52221a:b73cd3dbae279abadd3ef5ea87aba4ba11d6f80341ba915cf0713142f99105a4"
                                 ]
                               ]
                             },
@@ -1451,9 +1888,25 @@
                             "id": "Staging",
                             "path": "test-traffic/TestTraffic/PingerTask/Pinger/AssetImage/Staging"
                           },
-                          "Repository": {
-                            "id": "Repository",
-                            "path": "test-traffic/TestTraffic/PingerTask/Pinger/AssetImage/Repository"
+                          "AdoptRepository": {
+                            "id": "AdoptRepository",
+                            "path": "test-traffic/TestTraffic/PingerTask/Pinger/AssetImage/AdoptRepository",
+                            "children": {
+                              "Function": {
+                                "id": "Function",
+                                "path": "test-traffic/TestTraffic/PingerTask/Pinger/AssetImage/AdoptRepository/Function"
+                              },
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "test-traffic/TestTraffic/PingerTask/Pinger/AssetImage/AdoptRepository/Resource",
+                                "children": {
+                                  "Default": {
+                                    "id": "Default",
+                                    "path": "test-traffic/TestTraffic/PingerTask/Pinger/AssetImage/AdoptRepository/Resource/Default"
+                                  }
+                                }
+                              }
+                            }
                           }
                         }
                       }
@@ -1511,7 +1964,13 @@
                                             {
                                               "Ref": "AWS::Partition"
                                             },
-                                            ":ecr:us-east-1:431528647878:repository/aws-cdk/assets"
+                                            ":ecr:us-east-1:431528647878:repository/",
+                                            {
+                                              "Fn::GetAtt": [
+                                                "TestTrafficPingerTaskPingerAssetImageAdoptRepositoryD54B0027",
+                                                "RepositoryName"
+                                              ]
+                                            }
                                           ]
                                         ]
                                       }
@@ -1614,6 +2073,195 @@
                         }
                       }
                     }
+                  }
+                }
+              }
+            }
+          },
+          "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c": {
+            "id": "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c",
+            "path": "test-traffic/AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "test-traffic/AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "test-traffic/AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "test-traffic/AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "test-traffic/AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "ecr:GetRepositoryPolicy",
+                                    "ecr:SetRepositoryPolicy",
+                                    "ecr:DeleteRepository",
+                                    "ecr:ListImages",
+                                    "ecr:BatchDeleteImage"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":ecr:us-east-1:431528647878:repository/cdk/testtraffictesttrafficpingertaskpingerassetimageaf52221a"
+                                      ]
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62cServiceRoleDefaultPolicy6BC8737C",
+                            "roles": [
+                              {
+                                "Ref": "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62cServiceRoleD788AA17"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "test-traffic/AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "test-traffic/AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c/Code/Stage"
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "test-traffic/AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c/Code/AssetBucket"
+                  }
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "test-traffic/AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62c/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Ref": "AssetParametersa65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7S3Bucket7CBBD48C"
+                      },
+                      "s3Key": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParametersa65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7S3VersionKey87E3D057"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "||",
+                                    {
+                                      "Ref": "AssetParametersa65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7S3VersionKey87E3D057"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "handler": "handler.handler",
+                    "role": {
+                      "Fn::GetAtt": [
+                        "AdoptEcrRepositorydbc60defc59544bcaa5c28c95d68f62cServiceRoleD788AA17",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "nodejs10.x",
+                    "timeout": 300
+                  }
+                }
+              }
+            }
+          },
+          "AssetParameters": {
+            "id": "AssetParameters",
+            "path": "test-traffic/AssetParameters",
+            "children": {
+              "a65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7": {
+                "id": "a65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7",
+                "path": "test-traffic/AssetParameters/a65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7",
+                "children": {
+                  "S3Bucket": {
+                    "id": "S3Bucket",
+                    "path": "test-traffic/AssetParameters/a65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7/S3Bucket"
+                  },
+                  "S3VersionKey": {
+                    "id": "S3VersionKey",
+                    "path": "test-traffic/AssetParameters/a65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7/S3VersionKey"
+                  },
+                  "ArtifactHash": {
+                    "id": "ArtifactHash",
+                    "path": "test-traffic/AssetParameters/a65ac4beaa2b5a7b20eebf3b7c5c1c886b71428afa377e02dab0d10ab3be57e7/ArtifactHash"
                   }
                 }
               }
