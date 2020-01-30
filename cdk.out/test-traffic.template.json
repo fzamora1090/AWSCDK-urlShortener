@@ -1,0 +1,822 @@
+{
+  "Resources": {
+    "tensorvpcB3697C7C": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/Resource"
+      }
+    },
+    "tensorvpcPublicSubnet1Subnet02B33831": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/19",
+        "VpcId": {
+          "Ref": "tensorvpcB3697C7C"
+        },
+        "AvailabilityZone": "us-east-1a",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PublicSubnet1"
+          },
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet1/Subnet"
+      }
+    },
+    "tensorvpcPublicSubnet1RouteTableFB199379": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "tensorvpcB3697C7C"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet1/RouteTable"
+      }
+    },
+    "tensorvpcPublicSubnet1RouteTableAssociation05B35384": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "tensorvpcPublicSubnet1RouteTableFB199379"
+        },
+        "SubnetId": {
+          "Ref": "tensorvpcPublicSubnet1Subnet02B33831"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet1/RouteTableAssociation"
+      }
+    },
+    "tensorvpcPublicSubnet1DefaultRoute7F9CD0A4": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "tensorvpcPublicSubnet1RouteTableFB199379"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "tensorvpcIGWA25812AB"
+        }
+      },
+      "DependsOn": [
+        "tensorvpcVPCGW4235C481"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet1/DefaultRoute"
+      }
+    },
+    "tensorvpcPublicSubnet1EIPAFCB3F75": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet1/EIP"
+      }
+    },
+    "tensorvpcPublicSubnet1NATGateway44C8DEA3": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "tensorvpcPublicSubnet1EIPAFCB3F75",
+            "AllocationId"
+          ]
+        },
+        "SubnetId": {
+          "Ref": "tensorvpcPublicSubnet1Subnet02B33831"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet1/NATGateway"
+      }
+    },
+    "tensorvpcPublicSubnet2Subnet548E7731": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.32.0/19",
+        "VpcId": {
+          "Ref": "tensorvpcB3697C7C"
+        },
+        "AvailabilityZone": "us-east-1b",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PublicSubnet2"
+          },
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet2/Subnet"
+      }
+    },
+    "tensorvpcPublicSubnet2RouteTable1ED186D4": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "tensorvpcB3697C7C"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet2/RouteTable"
+      }
+    },
+    "tensorvpcPublicSubnet2RouteTableAssociationFA1B36A1": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "tensorvpcPublicSubnet2RouteTable1ED186D4"
+        },
+        "SubnetId": {
+          "Ref": "tensorvpcPublicSubnet2Subnet548E7731"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet2/RouteTableAssociation"
+      }
+    },
+    "tensorvpcPublicSubnet2DefaultRoute3E06CAD9": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "tensorvpcPublicSubnet2RouteTable1ED186D4"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "tensorvpcIGWA25812AB"
+        }
+      },
+      "DependsOn": [
+        "tensorvpcVPCGW4235C481"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet2/DefaultRoute"
+      }
+    },
+    "tensorvpcPublicSubnet2EIP5992022A": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet2/EIP"
+      }
+    },
+    "tensorvpcPublicSubnet2NATGateway60F37FFA": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "tensorvpcPublicSubnet2EIP5992022A",
+            "AllocationId"
+          ]
+        },
+        "SubnetId": {
+          "Ref": "tensorvpcPublicSubnet2Subnet548E7731"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet2/NATGateway"
+      }
+    },
+    "tensorvpcPublicSubnet3Subnet639A9554": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.64.0/19",
+        "VpcId": {
+          "Ref": "tensorvpcB3697C7C"
+        },
+        "AvailabilityZone": "us-east-1c",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PublicSubnet3"
+          },
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet3/Subnet"
+      }
+    },
+    "tensorvpcPublicSubnet3RouteTable9EA8316C": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "tensorvpcB3697C7C"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PublicSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet3/RouteTable"
+      }
+    },
+    "tensorvpcPublicSubnet3RouteTableAssociationED9BB197": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "tensorvpcPublicSubnet3RouteTable9EA8316C"
+        },
+        "SubnetId": {
+          "Ref": "tensorvpcPublicSubnet3Subnet639A9554"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet3/RouteTableAssociation"
+      }
+    },
+    "tensorvpcPublicSubnet3DefaultRoute6A76D52D": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "tensorvpcPublicSubnet3RouteTable9EA8316C"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "tensorvpcIGWA25812AB"
+        }
+      },
+      "DependsOn": [
+        "tensorvpcVPCGW4235C481"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet3/DefaultRoute"
+      }
+    },
+    "tensorvpcPublicSubnet3EIPB36A730E": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PublicSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet3/EIP"
+      }
+    },
+    "tensorvpcPublicSubnet3NATGatewayF34931B7": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "tensorvpcPublicSubnet3EIPB36A730E",
+            "AllocationId"
+          ]
+        },
+        "SubnetId": {
+          "Ref": "tensorvpcPublicSubnet3Subnet639A9554"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PublicSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PublicSubnet3/NATGateway"
+      }
+    },
+    "tensorvpcPrivateSubnet1SubnetDE231F1A": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.96.0/19",
+        "VpcId": {
+          "Ref": "tensorvpcB3697C7C"
+        },
+        "AvailabilityZone": "us-east-1a",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PrivateSubnet1"
+          },
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PrivateSubnet1/Subnet"
+      }
+    },
+    "tensorvpcPrivateSubnet1RouteTable7E03AD06": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "tensorvpcB3697C7C"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PrivateSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PrivateSubnet1/RouteTable"
+      }
+    },
+    "tensorvpcPrivateSubnet1RouteTableAssociation0B18DC99": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "tensorvpcPrivateSubnet1RouteTable7E03AD06"
+        },
+        "SubnetId": {
+          "Ref": "tensorvpcPrivateSubnet1SubnetDE231F1A"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PrivateSubnet1/RouteTableAssociation"
+      }
+    },
+    "tensorvpcPrivateSubnet1DefaultRoute096466E5": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "tensorvpcPrivateSubnet1RouteTable7E03AD06"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "tensorvpcPublicSubnet1NATGateway44C8DEA3"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PrivateSubnet1/DefaultRoute"
+      }
+    },
+    "tensorvpcPrivateSubnet2Subnet2331D176": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.128.0/19",
+        "VpcId": {
+          "Ref": "tensorvpcB3697C7C"
+        },
+        "AvailabilityZone": "us-east-1b",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PrivateSubnet2"
+          },
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PrivateSubnet2/Subnet"
+      }
+    },
+    "tensorvpcPrivateSubnet2RouteTable80A30DA0": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "tensorvpcB3697C7C"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PrivateSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PrivateSubnet2/RouteTable"
+      }
+    },
+    "tensorvpcPrivateSubnet2RouteTableAssociation33A1237A": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "tensorvpcPrivateSubnet2RouteTable80A30DA0"
+        },
+        "SubnetId": {
+          "Ref": "tensorvpcPrivateSubnet2Subnet2331D176"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PrivateSubnet2/RouteTableAssociation"
+      }
+    },
+    "tensorvpcPrivateSubnet2DefaultRoute9D34E50F": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "tensorvpcPrivateSubnet2RouteTable80A30DA0"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "tensorvpcPublicSubnet2NATGateway60F37FFA"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PrivateSubnet2/DefaultRoute"
+      }
+    },
+    "tensorvpcPrivateSubnet3Subnet0C5CEF84": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.160.0/19",
+        "VpcId": {
+          "Ref": "tensorvpcB3697C7C"
+        },
+        "AvailabilityZone": "us-east-1c",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PrivateSubnet3"
+          },
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PrivateSubnet3/Subnet"
+      }
+    },
+    "tensorvpcPrivateSubnet3RouteTable3D55337E": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "tensorvpcB3697C7C"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc/PrivateSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PrivateSubnet3/RouteTable"
+      }
+    },
+    "tensorvpcPrivateSubnet3RouteTableAssociationAB9C224B": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "tensorvpcPrivateSubnet3RouteTable3D55337E"
+        },
+        "SubnetId": {
+          "Ref": "tensorvpcPrivateSubnet3Subnet0C5CEF84"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PrivateSubnet3/RouteTableAssociation"
+      }
+    },
+    "tensorvpcPrivateSubnet3DefaultRoute7EDAA62C": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "tensorvpcPrivateSubnet3RouteTable3D55337E"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "tensorvpcPublicSubnet3NATGatewayF34931B7"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/PrivateSubnet3/DefaultRoute"
+      }
+    },
+    "tensorvpcIGWA25812AB": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test-traffic/tensor_vpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/IGW"
+      }
+    },
+    "tensorvpcVPCGW4235C481": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "tensorvpcB3697C7C"
+        },
+        "InternetGatewayId": {
+          "Ref": "tensorvpcIGWA25812AB"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/tensor_vpc/VPCGW"
+      }
+    },
+    "TestTrafficClusterECE91EDF": {
+      "Type": "AWS::ECS::Cluster",
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/TestTraffic/Cluster/Resource"
+      }
+    },
+    "TestTrafficPingerTaskTaskRole577CA794": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/TestTraffic/PingerTask/TaskRole/Resource"
+      }
+    },
+    "TestTrafficPingerTask4BCAB647": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
+                "Name": "URL",
+                "Value": "https://ave621pwll.execute-api.us-east-1.amazonaws.com/prod/6ef4641e"
+              }
+            ],
+            "Essential": true,
+            "Image": {
+              "Fn::Join": [
+                "",
+                [
+                  "431528647878.dkr.ecr.us-east-1.",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/aws-cdk/assets:26d6878b7dc164f686428c2a28cda09460120e2963818715445fb9a949403843"
+                ]
+              ]
+            },
+            "Name": "Pinger"
+          }
+        ],
+        "Cpu": "256",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "TestTrafficPingerTaskExecutionRole70CA866B",
+            "Arn"
+          ]
+        },
+        "Family": "testtrafficTestTrafficPingerTaskFAB2C377",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "TestTrafficPingerTaskTaskRole577CA794",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/TestTraffic/PingerTask/Resource"
+      }
+    },
+    "TestTrafficPingerTaskExecutionRole70CA866B": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/TestTraffic/PingerTask/ExecutionRole/Resource"
+      }
+    },
+    "TestTrafficPingerTaskExecutionRoleDefaultPolicy9A919C24": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ecr:us-east-1:431528647878:repository/aws-cdk/assets"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "TestTrafficPingerTaskExecutionRoleDefaultPolicy9A919C24",
+        "Roles": [
+          {
+            "Ref": "TestTrafficPingerTaskExecutionRole70CA866B"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/TestTraffic/PingerTask/ExecutionRole/DefaultPolicy/Resource"
+      }
+    },
+    "TestTrafficPingerServiceDE606B1E": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Ref": "TestTrafficClusterECE91EDF"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50
+        },
+        "DesiredCount": 10,
+        "EnableECSManagedTags": false,
+        "LaunchType": "FARGATE",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "TestTrafficPingerServiceSecurityGroupDBC2FA12",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Ref": "tensorvpcPrivateSubnet1SubnetDE231F1A"
+              },
+              {
+                "Ref": "tensorvpcPrivateSubnet2Subnet2331D176"
+              },
+              {
+                "Ref": "tensorvpcPrivateSubnet3Subnet0C5CEF84"
+              }
+            ]
+          }
+        },
+        "TaskDefinition": {
+          "Ref": "TestTrafficPingerTask4BCAB647"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/TestTraffic/PingerService/Service"
+      }
+    },
+    "TestTrafficPingerServiceSecurityGroupDBC2FA12": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "test-traffic/TestTraffic/PingerService/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "tensorvpcB3697C7C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "test-traffic/TestTraffic/PingerService/SecurityGroup/Resource"
+      }
+    }
+  }
+}

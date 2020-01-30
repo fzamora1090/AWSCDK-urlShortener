@@ -1,6 +1,6 @@
 # custom construct for fargate service to be able to run our docker image
 # what is a construct? sub-class that extends the construct base class
-from aws_cdk import Construct
+from aws_cdk.core import Construct
 
 from aws_cdk import aws_ecs, aws_ec2
 

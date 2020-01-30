@@ -2,10 +2,11 @@
 
 from aws_cdk import core
 
-from url_shortener.url_shortener_stack import UrlShortenerStack
+from url_shortener.url_shortener_stack import UrlShortenerStack, TrafficStack
 
 
 app = core.App()
 UrlShortenerStack(app, "url-shortener", env=core.Environment(region="us-east-1",account="431528647878"))
+TrafficStack(app, "test-traffic", env=core.Environment(region="us-east-1",account="431528647878"))
 
 app.synth()
